@@ -38,6 +38,10 @@ function love.load()
     ladderSound = love.audio.newSource("ladder.mp3", "static")
     ladderTimer = 0
     ladderCooldown = 0.25
+    ladderSound:setVolume(0.7)
+
+    jumpSound = love.audio.newSource("Jump.wav", "static")
+    -- LEVEL1 = love.audio.newSource("LLleveltheme.mp3", "static")
 
     canvas = love.graphics.newCanvas(screenWidth, screenHeight)
     local windowWidth, windowHeight = love.graphics.getDimensions()
@@ -54,12 +58,12 @@ function love.load()
     player.x = 200
     player.y = 200
     player.speed = 40
-    player.sprites = love.graphics.newImage("Bubby.png")
+    player.sprites = love.graphics.newImage("Bubby1.png")
     player.grid = anim8.newGrid(16, 16, player.sprites:getWidth(), player.sprites:getHeight())
 
     player.animations = {}
     player.animations.idol = anim8.newAnimation(player.grid(1, 1), 0.2)
-    player.animations.right = anim8.newAnimation(player.grid('1-2', 1), 0.2)
+    player.animations.right = anim8.newAnimation(player.grid('1-4', 1), 0.2)
     player.animations.left = anim8.newAnimation(player.grid('1-2', 4), 0.2)
     player.animations.up = anim8.newAnimation(player.grid('1-3', 2), 0.2)
     player.animations.jumpright = anim8.newAnimation(player.grid(1, 3), 0.3)
@@ -100,6 +104,7 @@ function love.update(dt)
     isClimbing = false
     local vx = 0
     local vy = 0
+    -- LEVEL1:play()
     -- updated every frame
 
     if love.keyboard.isDown('d') then
@@ -131,6 +136,7 @@ function love.update(dt)
     if love.keyboard.isDown('space') and love.keyboard.isDown('d') then
         player.collider:setLinearVelocity(vx, -100)
         player.anim = player.animations.jumpright
+        jumpSound:play()
         isMoving = true
         isJumping = true
     end
@@ -138,6 +144,7 @@ function love.update(dt)
     if love.keyboard.isDown('space') and love.keyboard.isDown('a') then
         player.collider:setLinearVelocity(vx, -100)
         player.anim = player.animations.jumpleft
+        jumpSound:play()
         isMoving = true
         isJumping = true
     end
@@ -233,7 +240,6 @@ function love.draw()
     -- Draw player
     player.anim:draw(player.sprites, player.x, player.y, nil, 1, 1, 8, 8)
 
-    -- Draw collision outlines (keep this for debug visuals)
     -- world:draw()
 
     love.graphics.setCanvas()
