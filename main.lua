@@ -5,12 +5,14 @@ local scale
 local anim8 = require 'libraries/anim8'
 local player = require 'player'
 local background = require 'background'
+local intro = require 'intro'
 
 function love.load()
     love.graphics.setDefaultFilter("nearest", "nearest") --no smoothing
 
     player:load()
     background:load()
+    intro:load()
 
     canvas = love.graphics.newCanvas(screenWidth, screenHeight)
     local windowWidth, windowHeight = love.graphics.getDimensions()
@@ -25,6 +27,7 @@ function love.draw()
     love.graphics.setCanvas(canvas)
     love.graphics.clear()
 
+    -- intro:draw()
     -- Draw background
     background:draw()
     -- Draw player
