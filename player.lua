@@ -1,6 +1,6 @@
 player = {}
 
-function player:load(world)
+function player:load()
     anim8 = require 'libraries/anim8'
     self.sprites = love.graphics.newImage("assets/Bubby1.png")
 
@@ -12,9 +12,6 @@ function player:load(world)
     self.walkcooldown = 0.3
     self.walkSoundToggle = false
 
-    self.playerCollider = world:newRectangleCollider(player.x, player.y, 16, 16)
-    self.playerCollider:setFixedRotation(true)
-    self.playerCollider:setFriction(1.0)
 
     self.jumpSound = love.audio.newSource("sounds/Jump.wav", "static")
     self.walkSound1 = love.audio.newSource("sounds/Step1.wav", "static")
@@ -43,25 +40,20 @@ function player:handleInput(dt)
     self.isClimbing = false
     self.isJumping = false
 
-    local vx, vy = self.playerCollider:getLinearVelocity()
     local speed = self.speed
 
     if love.keyboard.isDown('d') then
-        -- self.x = self.x + (self.speed * dt)
-        vx = 30
+        self.x = self.x + (self.speed * dt)
         self.anim = self.animations.right
         self.isMoving = true
     elseif love.keyboard.isDown('a') then
-        -- self.x = self.x - (self.speed * dt)
-        vx = -30
+        self.x = self.x - (self.speed * dt)
         self.anim = self.animations.left
         self.isMoving = true
     end
 
     if love.keyboard.isDown('w') then
-        -- self.y = self.y - (self.speed * dt)
-        vy = -40
-        vx = 0
+        self.y = self.y - (self.speed * dt)
         self.anim = self.animations.up
         self.isMoving = true
         self.isClimbing = true
@@ -73,23 +65,20 @@ function player:handleInput(dt)
     end
 
     if love.keyboard.isDown('space') and love.keyboard.isDown('d') and self.jumpcooldown == 0 then
-        -- self.y = self.y - (self.speed * dt)
-        vy = -80
+        self.y = self.y - (self.speed * dt)
         self.anim = self.animations.jumpright
         self.isJumping = true
         self.isMoving = true
         self.jumpcooldown = 1.5
         self:playJumpSounds()
     elseif love.keyboard.isDown('space') and love.keyboard.isDown('a') and self.jumpcooldown == 0 then
-        -- self.y = self.y - (self.speed * dt)
-        vy = -80
+        self.y = self.y - (self.speed * dt)
         self.anim = self.animations.jumpleft
         self.isJumping = true
         self.isMoving = true
         self.jumpcooldown = 1.5
         self:playJumpSounds()
     elseif love.keyboard.isDown('space') and self.jumpcooldown == 0 then 
-        vy = -80
         self.anim = self.animations.jumpright
         self.isJumping = true
         self.isMoving = true
@@ -101,7 +90,6 @@ function player:handleInput(dt)
         self.jumpcooldown = math.max(0, self.jumpcooldown - dt)
     end
     
-    self.playerCollider:setLinearVelocity(vx, vy)
 
     if not self.isMoving then
         self.anim:gotoFrame(1)
@@ -158,7 +146,6 @@ end
 function player:update(dt)
     self.anim:update(dt)
     self:handleInput(dt)
-    self.x, self.y = self.playerCollider:getPosition()
 end
 
 

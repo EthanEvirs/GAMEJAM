@@ -9,12 +9,10 @@ local intro = require 'intro'
 
 function love.load()
     love.graphics.setDefaultFilter("nearest", "nearest") --no smoothing
-    wf = require "libraries/windfield"
-                    --gravity x/y    
-    world = wf.newWorld(0, 150)
+
     
-    player:load(world)
-    background:load(world)
+    player:load()
+    background:load()
     intro:load()
 
     canvas = love.graphics.newCanvas(screenWidth, screenHeight)
@@ -24,13 +22,11 @@ end
 
 function love.update(dt)
     player:update(dt)
-    world:update(dt)
 end
 
 function love.draw()
     love.graphics.setCanvas(canvas)
     love.graphics.clear()
-    world:draw()
 
     -- intro:draw()
     -- Draw background

@@ -1,8 +1,7 @@
-wf = require "libraries/windfield"
 background = {}
 
 
-function background:load(world)
+function background:load()
     anim8 = require 'libraries/anim8'
     self.sprites = love.graphics.newImage("assets/background.png")
 
@@ -18,21 +17,6 @@ function background:load(world)
         { x = 120, y = 56, width = 16, height = 32 },
         { x = 200, y = 152, width = 16, height = 48 }
     }
-
-    self.floorcolliders1 = {}
-    for _, f in ipairs(self.floors) do
-        local collider = world:newRectangleCollider(f.x, f.y, f.width, f.height)
-        collider:setType('static')
-        table.insert(self.floorcolliders1, collider)
-    end
-
-    self.laddercolliders1 = {}
-    for _, l in ipairs(self.ladders) do
-        local collider = world:newRectangleCollider(l.x, l.y, l.width, l.height)
-        collider:setType('static')
-        table.insert(self.laddercolliders1, collider)
-    end
-
 
     self:loadFloorAnimations()
     self:loadLadderAnimations()
